@@ -12,7 +12,8 @@ import matplotlib.pyplot as plt
 #%% load
 # 1. Use pydicom's dcmread method to load the image
 dcm = pydicom.dcmread("instance.dcm")
-
+print('actual wc: %.2f'%dcm.WindowCenter)   # print actual windowcenter from dicom metadata
+print('actual ww: %d'%dcm.WindowWidth)      # print actual windowwidth from dicom metadata
 print(f"Modality: {dcm.Modality}")
 #%% apply W/L
 # 2. Apply WW/WC transform. Keep in mind that pixels are available as 
@@ -24,9 +25,10 @@ print(f"Modality: {dcm.Modality}")
 pixels = np.copy(dcm.pixel_array)
 print(f"min: {np.min(pixels)}, max: {np.max(pixels)}")
 
-wc = 2472
-ww = 4144
-
+#wc = 2472
+#ww = 4144
+wc = dcm.WindowCenter  # to extract acutal windowcenter from dicom metadata
+ww = dcm.WindowWidth   # to extract acutal windowwidth from dicom metadata
 hu_min = wc - ww/2
 hu_max = wc + ww/2
 
